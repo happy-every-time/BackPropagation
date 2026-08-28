@@ -245,33 +245,42 @@ namespace base_node {
     }
 
     double node_forward(double a, double b, MNode* node) {
+        Node* node1 = (Node*)(node->node);
+        node1->inputs[0] = a;
+        node1->inputs[1] = b;
         switch (node->type) {
         case NODE_TYPE_SUB:
+            return a - b;
         case NODE_TYPE_MUL:
+            return a * b;
         case NODE_TYPE_DIV:
-            Node* node1 = (Node*)(node->node);
-            break;
+            return a / b;
+        }
+
+    }
+
+    double node_forward(double* a, MNode* node) {
+        switch (node->type) {
         case NODE_TYPE_ADD:
+            double value = 0.0;
             AddNode* node2 = (AddNode*)(node->type);
-            break;
-        case NODE_TYPE_OUTPUT:
-        case NODE_TYPE_PRINT:
-            OutputNode* node3 = (OutputNode*)(node->type);
-            break;
-        case NODE_TYPE_VAULE:
-            ValueNode* node4 = (ValueNode*)(node->type);
-            break;
-        default:
-            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
-            throw std::runtime_error("[ERROR] Wrong node type");
+            for (int i = 0; i < node2->width; i++) {
+                value += a[i];
+            }
+            return value;
         }
     }
 
-    void node_forward(double a, MNode* node) {
+    void node_forward(double a, MNode* node, Net* root) {
         switch (node->type) {
         case NODE_TYPE_OUTPUT:
         case NODE_TYPE_PRINT:
             OutputNode* node3 = (OutputNode*)(node->type);
+            std::cout << a;
+            Tuple* t = new Tuple;
+            t->key = node3->name;
+            t->value = a;
+            root->outputs.push_back(t);
             break;
         default:
             std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
