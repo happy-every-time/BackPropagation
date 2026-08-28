@@ -374,10 +374,31 @@ namespace base_node {
                             (*values).push_back(t);
                         case NODE_TYPE_ADD:
                             AddNode* node2 = (AddNode*)(root->nodes[i]->node);
-                            double* a = new double[node2->width];
+                            int w = node2->width;
+                            double* aa = new double[w];
                             for (int j = 0; j < node2->width; j++) {
-                                a[j] = 
+                                for (int k = 0; k < (*values).size(); k++) {
+                                    if ((*values)[k]->key == node2->inputs[j]) {
+                                        aa[j] = (*values)[k]->value;
+                                    }
+                                }
                             }
+                            double c = node_forward(aa, root->nodes[i]);
+                            delete aa;
+                            Tuple* t = new Tuple;
+                            t->key = node2->output;
+                            t->value = c;
+                            (*values).push_back(t);
+                        case NODE_TYPE_OUTPUT:
+                        case NODE_TYPE_PRINT:
+                            OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
+                            double a = 0.0;
+                            for (int j = 0; j < (*values).size(); j++) {
+                                if ((*values)[j]->key == node3->input) {
+                                    a = (*values)[j]->value;
+                                }
+                            }
+
                         }
                     }
                 }
