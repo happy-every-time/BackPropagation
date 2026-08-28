@@ -116,13 +116,31 @@ namespace base_node {
                 break;
             case NODE_TYPE_ADD:
                 AddNode* node2 = (AddNode*)(root->nodes[i]->node);
+                if (node2->name == aname) {
+                    node2->output = number;
+                }
+                else if (node2->name == bname) {
+                    if (bnumber < 0) {
+                        bnumber = 0;
+                    }
+                    if (bnumber > node2->width) {
+                        bnumber = node2->width;
+                    }
+                    node2->inputs[bnumber] = number;
+                }
                 break;
             case NODE_TYPE_OUTPUT:
             case NODE_TYPE_PRINT:
                 OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
+                if (node3->name == bname) {
+                    node3->input = number;
+                }
                 break;
             case NODE_TYPE_VAULE:
-                ValueNode* node3 = (ValueNode*)(root->nodes[i]->node);
+                ValueNode* node4 = (ValueNode*)(root->nodes[i]->node);
+                if (node4->name == aname) {
+                    node4->output = number;
+                }
                 break;
             default:
                 std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
