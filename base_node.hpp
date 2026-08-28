@@ -29,7 +29,7 @@ namespace base_node {
         bool is_sort;
         int output;
         Net* root;
-        int higth;
+        int hight;
         int name;
         int inputs[2];
         double value[2];
@@ -41,7 +41,7 @@ namespace base_node {
         int width;
         int output;
         Net* root;
-        int higth;
+        int hight;
         int name;
         int* inputs;
         double* value;
@@ -50,7 +50,7 @@ namespace base_node {
     struct OutputNode {
         short type = -1;
         bool is_sort;
-        int higth;
+        int hight;
         Net* root;
         int name;
         int input;
@@ -60,7 +60,7 @@ namespace base_node {
     struct ValueNode {
         const short type = NODE_TYPE_VAULE;
         bool is_sort;
-        int higth = 0;
+        int hight = 0;
         Net* root;
         int name;
         int output;
@@ -73,13 +73,18 @@ namespace base_node {
     };
 
     Net* create_net(bool create_out);
+    void* create_node(short type, Net* root, int name);
+
     int get_a_new_number(Net* root);
     void del_a_number(Net* root, int number);
-    void* create_node(short type, Net* root, int name);
+    
     void add_node(Net* root, MNode* node);
     void link_node(Net* root, int aname, int bname, int bnumber);
     void sort_node(Net* root);
+
     bool in(int a, std::vector<int> b);
+    int get_node_hight(MNode* node);
+
     double node_forward(double a, double b, MNode* node); // Base node
     double node_forward(double* a, MNode* node); // Add node
     void node_forward(double a, MNode* node, Net* root); // Print and output node

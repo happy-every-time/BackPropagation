@@ -188,9 +188,9 @@ namespace base_node {
         }
         std::cout << std::endl;
         #endif
-        int higth = 0;
+        int hight = 0;
         while (true) {
-            higth++;
+            hight++;
             for (int i = 0; i < root->nodes.size(); i++) {
                 switch (root->nodes[i]->type) {
                 case NODE_TYPE_SUB:
@@ -199,7 +199,7 @@ namespace base_node {
                     Node* node1 = (Node*)(root->nodes[i]->node);
                     if (!(node1->is_sort)) {
                         if (in(node1->inputs[0], outputs) && in(node1->inputs[1], outputs)) {
-                            node1->higth = higth;
+                            node1->hight = hight;
                             node1->is_sort = true;
                         }
                     }
@@ -212,7 +212,7 @@ namespace base_node {
                             in_it = in_it && in(node2->inputs[i], outputs);
                         }
                         if (in_it) {
-                            node2->higth = higth;
+                            node2->hight = hight;
                             node2->is_sort = true;
                         }
                     }
@@ -222,7 +222,7 @@ namespace base_node {
                     OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
                     if (!(node3->is_sort)) {
                         if (in(node3->input, outputs)) {
-                            node3->higth = higth;
+                            node3->hight = hight;
                             node3->is_sort = true;
                         }
                     }
@@ -242,6 +242,29 @@ namespace base_node {
             }
         }
         return false;
+    }
+
+    int get_node_hight(MNode* node) {
+        switch (node->type) {
+        case NODE_TYPE_SUB:
+        case NODE_TYPE_MUL:
+        case NODE_TYPE_DIV:
+            Node* node1 = (Node*)(node->type);
+            return node1->hight;
+            break;
+        case NODE_TYPE_ADD:
+            AddNode* node2 = (AddNode*)(node->type);
+            return node2->hight;
+            break;
+        case NODE_TYPE_OUTPUT:
+        case NODE_TYPE_PRINT:
+            OutputNode* node3 = (OutputNode*)(node->type);
+            return node3->hight;
+            break;
+        default:
+            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+            throw std::runtime_error("[ERROR] Wrong node type");
+        }
     }
 
     double node_forward(double a, double b, MNode* node) {
