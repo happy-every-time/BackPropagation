@@ -334,7 +334,7 @@ namespace base_node {
         }
     }
 
-    double* net_forward(Net* root) {
+    void net_forward(Net* root) {
         int max_hight = 1;
         for (int i = 0; i < root->nodes.size(); i++) {
             max_hight = max(max_hight, get_node_hight(root->nodes[i]));
@@ -404,5 +404,24 @@ namespace base_node {
                 }
             }
         }
+    }
+
+    void node_backward(double a, MNode* node, Net* root) {
+        switch (node->type) {
+        case NODE_TYPE_VAULE:
+            ValueNode* node4 = (ValueNode*)(node->node);
+            Tuple* t = new Tuple;
+            t->key = node4->name;
+            t->value = a;
+            root->outputs.push_back(t);
+        }
+    }
+
+    void node_backward(double a, MNode* node, std::vector<Tuple*>* values) {
+    
+    }
+
+    double* net_backward(Net* root) {
+    
     }
 };
