@@ -45,44 +45,44 @@ namespace base_node {
         case NODE_TYPE_SUB:
         case NODE_TYPE_MUL:
         case NODE_TYPE_DIV:
-            Node* node = new Node;
-            node->type = type;
-            node->root = root;
-            node->name = name;
+            Node* node1 = new Node;
+            node1->type = type;
+            node1->root = root;
+            node1->name = name;
             n->type = type;
-            n->node = node;
+            n->node = node1;
             return n;
         case NODE_TYPE_ADD:
-            AddNode* node = new AddNode;
-            node->type = NODE_TYPE_ADD;
-            node->root = root;
-            node->name = name;
+            AddNode* node2 = new AddNode;
+            node2->type = NODE_TYPE_ADD;
+            node2->root = root;
+            node2->name = name;
             n->type = type;
-            n->node = node;
+            n->node = node2;
             return n;
         case NODE_TYPE_OUTPUT:
-            OutputNode* node = new OutputNode;
-            node->type = NODE_TYPE_OUTPUT;
-            node->root = root;
-            node->name = name;
+            OutputNode* node3 = new OutputNode;
+            node3->type = NODE_TYPE_OUTPUT;
+            node3->root = root;
+            node3->name = name;
             n->type = type;
-            n->node = node;
+            n->node = node3;
             return n;
         case NODE_TYPE_VAULE:
-            ValueNode* node = new ValueNode;
-            node->type = NODE_TYPE_VAULE;
-            node->root = root;
-            node->name = name;
+            ValueNode* node4 = new ValueNode;
+            node4->type = NODE_TYPE_VAULE;
+            node4->root = root;
+            node4->name = name;
             n->type = type;
-            n->node = node;
+            n->node = node4;
             return n;
         case NODE_TYPE_PRINT:
-            OutputNode* node = new OutputNode;
-            node->type = NODE_TYPE_PRINT;
-            node->root = root;
-            node->name = name;
+            OutputNode* node5 = new OutputNode;
+            node5->type = NODE_TYPE_PRINT;
+            node5->root = root;
+            node5->name = name;
             n->type = type;
-            n->node = node;
+            n->node = node5;
             return n;
         default:
             std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
@@ -377,7 +377,9 @@ namespace base_node {
                         case NODE_TYPE_ADD:
                             AddNode* node2 = (AddNode*)(root->nodes[i]->node);
                             double* a = new double[node2->width];
-
+                            for (int j; j < node2->width; j++) {
+                                a[j] = 
+                            }
                         }
                     }
                 }
