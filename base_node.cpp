@@ -299,7 +299,7 @@ namespace base_node {
         switch (node->type) {
         case NODE_TYPE_ADD:
             double value = 0.0;
-            AddNode* node2 = (AddNode*)(node->type);
+            AddNode* node2 = (AddNode*)(node->node);
             for (int i = 0; i < node2->width; i++) {
                 value += a[i];
             }
@@ -311,7 +311,7 @@ namespace base_node {
         switch (node->type) {
         case NODE_TYPE_OUTPUT:
         case NODE_TYPE_PRINT:
-            OutputNode* node3 = (OutputNode*)(node->type);
+            OutputNode* node3 = (OutputNode*)(node->node);
             std::cout << a;
             Tuple* t = new Tuple;
             t->key = node3->name;
@@ -374,6 +374,10 @@ namespace base_node {
                             t->key = node1->output;
                             t->value = c;
                             (*values).push_back(t);
+                        case NODE_TYPE_ADD:
+                            AddNode* node2 = (AddNode*)(root->nodes[i]->node);
+                            double* a = new double[node2->width];
+
                         }
                     }
                 }
