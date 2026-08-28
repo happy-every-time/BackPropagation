@@ -54,7 +54,6 @@ namespace base_node {
             return n;
         case NODE_TYPE_ADD:
             AddNode* node2 = new AddNode;
-            node2->type = NODE_TYPE_ADD;
             node2->root = root;
             node2->name = name;
             n->type = type;
@@ -70,7 +69,6 @@ namespace base_node {
             return n;
         case NODE_TYPE_VAULE:
             ValueNode* node4 = new ValueNode;
-            node4->type = NODE_TYPE_VAULE;
             node4->root = root;
             node4->name = name;
             n->type = type;
@@ -361,7 +359,7 @@ namespace base_node {
                             Node* node1 = (Node*)(root->nodes[i]->node);
                             double a = 0.0;
                             double b = 0.0;
-                            for (int j; j < (*values).size(); j++) {
+                            for (int j = 0; j < (*values).size(); j++) {
                                 if ((*values)[j]->key == node1->inputs[0]) {
                                     a = (*values)[j]->value;
                                 }
@@ -377,7 +375,7 @@ namespace base_node {
                         case NODE_TYPE_ADD:
                             AddNode* node2 = (AddNode*)(root->nodes[i]->node);
                             double* a = new double[node2->width];
-                            for (int j; j < node2->width; j++) {
+                            for (int j = 0; j < node2->width; j++) {
                                 a[j] = 
                             }
                         }
