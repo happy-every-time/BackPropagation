@@ -95,25 +95,50 @@ namespace base_node {
     }
 
     void link_node(Net* root, int aname, int bname, int bnumber) {
-        
-    }
-
-    void sort_node(Net* net) {
-        for (int i = 0; i < net->nodes.size(); i++) {
-            switch (net->nodes[i]->type) {
+        for (int i = 0; i < root->nodes.size(); i++) {
+            switch (root->nodes[i]->type) {
             case NODE_TYPE_SUB:
             case NODE_TYPE_MUL:
             case NODE_TYPE_DIV:
-                Node* node1 = (Node*)(net->nodes[i]->node);
+                Node* node1 = (Node*)(root->nodes[i]->node);
+                int number = get_a_new_number(root);
+                if (bnumber <= 0) {
+
+                }
+                break;
+            case NODE_TYPE_ADD:
+                AddNode* node2 = (AddNode*)(root->nodes[i]->node);
+                break;
+            case NODE_TYPE_OUTPUT:
+            case NODE_TYPE_PRINT:
+                OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
+                break;
+            case NODE_TYPE_VAULE:
+                ValueNode* node3 = (ValueNode*)(root->nodes[i]->node);
+                break;
+            default:
+                std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+                throw std::runtime_error("[ERROR] Wrong node type");
+            }
+        }
+    }
+
+    void sort_node(Net* root) {
+        for (int i = 0; i < root->nodes.size(); i++) {
+            switch (root->nodes[i]->type) {
+            case NODE_TYPE_SUB:
+            case NODE_TYPE_MUL:
+            case NODE_TYPE_DIV:
+                Node* node1 = (Node*)(root->nodes[i]->node);
                 node1->is_sort = false;
                 break;
             case NODE_TYPE_ADD:
-                AddNode* node2 = (AddNode*)(net->nodes[i]->node);
+                AddNode* node2 = (AddNode*)(root->nodes[i]->node);
                 node2->is_sort = false;
                 break;
             case NODE_TYPE_OUTPUT:
             case NODE_TYPE_PRINT:
-                OutputNode* node3 = (OutputNode*)(net->nodes[i]->node);
+                OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
                 node3->is_sort = false;
                 break;
             default:
@@ -123,10 +148,10 @@ namespace base_node {
         }
 
         std::vector<int> outputs = {};
-        outputs.reserve(net->nodes.size());
-        for (int i = 0; i < net->nodes.size(); i++) {
-            if ((net->nodes[i]->type) == NODE_TYPE_VAULE) {
-                ValueNode* node = (ValueNode*)(net->nodes[i]->node);
+        outputs.reserve(root->nodes.size());
+        for (int i = 0; i < root->nodes.size(); i++) {
+            if ((root->nodes[i]->type) == NODE_TYPE_VAULE) {
+                ValueNode* node = (ValueNode*)(root->nodes[i]->node);
                 outputs.push_back(node->output);
             }
         }
@@ -140,12 +165,12 @@ namespace base_node {
         int higth = 0;
         while (true) {
             higth++;
-            for (int i = 0; i < net->nodes.size(); i++) {
-                switch (net->nodes[i]->type) {
+            for (int i = 0; i < root->nodes.size(); i++) {
+                switch (root->nodes[i]->type) {
                 case NODE_TYPE_SUB:
                 case NODE_TYPE_MUL:
                 case NODE_TYPE_DIV:
-                    Node* node1 = (Node*)(net->nodes[i]->node);
+                    Node* node1 = (Node*)(root->nodes[i]->node);
                     if (!(node1->is_sort)) {
                         if (in(node1->inputs[0], outputs) && in(node1->inputs[1], outputs)) {
                             node1->higth = higth;
@@ -154,7 +179,7 @@ namespace base_node {
                     }
                     break;
                 case NODE_TYPE_ADD:
-                    AddNode* node2 = (AddNode*)(net->nodes[i]->node);
+                    AddNode* node2 = (AddNode*)(root->nodes[i]->node);
                     if (!(node2->is_sort)) {
                         bool in_it = true;
                         for (int i = 0; i < node2->width; i++) {
@@ -168,7 +193,7 @@ namespace base_node {
                     break;
                 case NODE_TYPE_OUTPUT:
                 case NODE_TYPE_PRINT:
-                    OutputNode* node3 = (OutputNode*)(net->nodes[i]->node);
+                    OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
                     if (!(node3->is_sort)) {
                         if (in(node3->input, outputs)) {
                             node3->higth = higth;

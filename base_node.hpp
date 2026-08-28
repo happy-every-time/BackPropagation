@@ -72,6 +72,6 @@ namespace base_node {
     void* create_node(short type, Net* root, int name);
     void add_node(Net* root, MNode* node);
     void link_node(Net* root, int aname, int bname, int bnumber);
-    void sort_node(Net* net);
+    void sort_node(Net* root);
     bool in(int a, std::vector<int> b);
 };
