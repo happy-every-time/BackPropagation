@@ -348,7 +348,7 @@ namespace base_node {
                         ValueNode* node = (ValueNode*)(root->nodes[i]->node);
                         Tuple* t = new Tuple;
                         t->key = node->output;
-                        t->value = node->value;
+                        t->value = node_forward(root->nodes[i]);
                         (*values).push_back(t);
                     }
                     else {
@@ -398,7 +398,7 @@ namespace base_node {
                                     a = (*values)[j]->value;
                                 }
                             }
-
+                            node_forward(a, root->nodes[i], root);
                         }
                     }
                 }
