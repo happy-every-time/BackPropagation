@@ -281,6 +281,7 @@ namespace base_node {
         else {
             std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
             throw std::runtime_error("[ERROR] Wrong node type");
+            return 0.0;
         }
     }
 
