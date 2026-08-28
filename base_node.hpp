@@ -84,6 +84,7 @@ namespace base_node {
 
     bool in(int a, std::vector<int> b);
     int get_node_hight(MNode* node);
+    double max(double a, double b);
 
     double node_forward(double a, double b, MNode* node); // Base node
     double node_forward(double* a, MNode* node); // Add node
