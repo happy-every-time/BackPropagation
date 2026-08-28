@@ -95,15 +95,15 @@ namespace base_node {
     }
 
     void link_node(Net* root, int aname, int bname, int bnumber) {
+        int number = get_a_new_number(root);
         for (int i = 0; i < root->nodes.size(); i++) {
             switch (root->nodes[i]->type) {
             case NODE_TYPE_SUB:
             case NODE_TYPE_MUL:
             case NODE_TYPE_DIV:
                 Node* node1 = (Node*)(root->nodes[i]->node);
-                int number = get_a_new_number(root);
-                if (bnumber <= 0) {
-
+                if (node1->name == aname) {
+                    node1->output = number;
                 }
                 break;
             case NODE_TYPE_ADD:
