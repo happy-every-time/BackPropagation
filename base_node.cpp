@@ -105,6 +105,14 @@ namespace base_node {
                 if (node1->name == aname) {
                     node1->output = number;
                 }
+                else if (node1->name == bname) {
+                    if (bnumber <= 0) {
+                        node1->inputs[0] = number;
+                    }
+                    else if (bnumber >= 1) {
+                        node1->inputs[1] = number;
+                    }
+                }
                 break;
             case NODE_TYPE_ADD:
                 AddNode* node2 = (AddNode*)(root->nodes[i]->node);
