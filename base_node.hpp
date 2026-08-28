@@ -13,7 +13,7 @@
 
 namespace base_node {
     struct Net {
-        std::vector<int> old_number = {0};
+        std::vector<int> old_number;
         std::vector<MNode*> nodes;
         int just_number = 0;
     };

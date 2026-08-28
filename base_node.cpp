@@ -13,7 +13,22 @@ namespace base_node {
     }
 
     int get_a_new_number(Net* root) {
-
+        if (root->old_number.size() < root->just_number) {
+            int number = 0;
+            while (true) {
+                if (!(in(number, root->old_number))) {
+                    root->old_number.push_back(number);
+                    root->just_number = number;
+                    return number;
+                }
+            }
+        }
+        else {
+            int number = root->just_number + 1;
+            root->just_number = number;
+            root->old_number.push_back(number);
+            return number;
+        }
     }
 
     void* create_node(short type, Net* root, int name) {
