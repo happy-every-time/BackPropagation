@@ -12,6 +12,10 @@ namespace base_node {
         return net;
     }
 
+    int get_a_new_number(Net* root) {
+
+    }
+
     void* create_node(short type, Net* root, int name) {
         MNode* n = new MNode;
         switch (type) {
@@ -68,7 +72,7 @@ namespace base_node {
     }
 
     void link_node(Net* root, int aname, int bname, int bnumber) {
-
+        
     }
 
     void sort_node(Net* net) {

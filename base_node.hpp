@@ -67,6 +67,7 @@ namespace base_node {
     };
 
     Net* create_net(bool create_out);
+    int get_a_new_number(Net* root);
     void* create_node(short type, Net* root, int name);
     void add_node(Net* root, MNode* node);
     void link_node(Net* root, int aname, int bname, int bnumber);
