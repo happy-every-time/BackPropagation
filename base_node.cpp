@@ -31,6 +31,14 @@ namespace base_node {
         }
     }
 
+    void del_a_number(Net* root, int number) {
+        for (int i = 0; i < root->old_number.size(); i++) {
+            if (root->old_number[i] == number) {
+                root->old_number.erase(root->old_number.begin() + i);
+            }
+        }
+    }
+
     void* create_node(short type, Net* root, int name) {
         MNode* n = new MNode;
         switch (type) {

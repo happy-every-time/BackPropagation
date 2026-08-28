@@ -13,7 +13,7 @@
 
 namespace base_node {
     struct Net {
-        std::vector<int> old_number;
+        std::vector<int> old_number = {0};
         std::vector<MNode*> nodes;
         int just_number = 0;
     };
@@ -68,6 +68,7 @@ namespace base_node {
 
     Net* create_net(bool create_out);
     int get_a_new_number(Net* root);
+    void del_a_number(Net* root, int number);
     void* create_node(short type, Net* root, int name);
     void add_node(Net* root, MNode* node);
     void link_node(Net* root, int aname, int bname, int bnumber);
