@@ -14,9 +14,9 @@
 namespace base_node {
     struct Net {
         std::vector<int> old_number = {0};
-        std::vector<MNode*> nodes;
-        std::vector<Tuple*> outputs;
-        std::vector<Tuple*> back_outputs;
+        std::vector<struct MNode*> nodes;
+        std::vector<struct Tuple*> outputs;
+        std::vector<struct Tuple*> back_outputs;
         int just_number = 0;
     };
 
@@ -95,5 +95,5 @@ namespace base_node {
 
     void node_backward(double a, MNode* node, Net* root); // Value node
     void node_backward(double a, MNode* node, std::vector<Tuple*>* values); // Base and add node
-    double* net_backward(Net* root);
+    void net_backward(Net* root);
 };

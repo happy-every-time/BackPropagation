@@ -13,7 +13,7 @@ namespace base_node {
     }
 
     int get_a_new_number(Net* root) {
-        if (root->old_number.size() < root->just_number) {
+        if ((int)(root->old_number.size()) < root->just_number) {
             int number = 0;
             while (true) {
                 if (!(in(number, root->old_number))) {
@@ -32,7 +32,7 @@ namespace base_node {
     }
 
     void del_a_number(Net* root, int number) {
-        for (int i = 0; i < root->old_number.size(); i++) {
+        for (int i = 0; i < (int)(root->old_number.size()); i++) {
             if (root->old_number[i] == number) {
                 root->old_number.erase(root->old_number.begin() + i);
             }
@@ -41,25 +41,24 @@ namespace base_node {
 
     void* create_node(short type, Net* root, int name) {
         MNode* n = new MNode;
-        switch (type) {
-        case NODE_TYPE_SUB:
-        case NODE_TYPE_MUL:
-        case NODE_TYPE_DIV:
-            Node* node1 = new Node;
-            node1->type = type;
-            node1->root = root;
-            node1->name = name;
+        if (type == NODE_TYPE_SUB || type == NODE_TYPE_MUL || type == NODE_TYPE_DIV) {
+            Node* node = new Node;
+            node->type = type;
+            node->root = root;
+            node->name = name;
             n->type = type;
-            n->node = node1;
+            n->node = node;
             return n;
-        case NODE_TYPE_ADD:
-            AddNode* node2 = new AddNode;
-            node2->root = root;
-            node2->name = name;
+        }
+        else if (type == NODE_TYPE_ADD) {
+            AddNode* node = new AddNode;
+            node->root = root;
+            node->name = name;
             n->type = type;
-            n->node = node2;
+            n->node = node;
             return n;
-        case NODE_TYPE_OUTPUT:
+        }
+        else if (type == NODE_TYPE_OUTPUT) {
             OutputNode* node3 = new OutputNode;
             node3->type = NODE_TYPE_OUTPUT;
             node3->root = root;
@@ -67,22 +66,25 @@ namespace base_node {
             n->type = type;
             n->node = node3;
             return n;
-        case NODE_TYPE_VAULE:
-            ValueNode* node4 = new ValueNode;
-            node4->root = root;
-            node4->name = name;
+        }
+        else if (type == NODE_TYPE_VAULE) {
+            ValueNode* node = new ValueNode;
+            node->root = root;
+            node->name = name;
             n->type = type;
-            n->node = node4;
+            n->node = node;
             return n;
-        case NODE_TYPE_PRINT:
-            OutputNode* node5 = new OutputNode;
-            node5->type = NODE_TYPE_PRINT;
-            node5->root = root;
-            node5->name = name;
+        }
+        else if (type == NODE_TYPE_PRINT) {
+            OutputNode* node = new OutputNode;
+            node->type = NODE_TYPE_PRINT;
+            node->root = root;
+            node->name = name;
             n->type = type;
-            n->node = node5;
+            n->node = node;
             return n;
-        default:
+        }
+        else {
             std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
             throw std::runtime_error("[ERROR] Wrong node type");
         }
@@ -94,53 +96,50 @@ namespace base_node {
 
     void link_node(Net* root, int aname, int bname, int bnumber) {
         int number = get_a_new_number(root);
-        for (int i = 0; i < root->nodes.size(); i++) {
-            switch (root->nodes[i]->type) {
-            case NODE_TYPE_SUB:
-            case NODE_TYPE_MUL:
-            case NODE_TYPE_DIV:
-                Node* node1 = (Node*)(root->nodes[i]->node);
-                if (node1->name == aname) {
-                    node1->output = number;
+        for (int i = 0; i < (int)(root->nodes.size()); i++) {
+            if (root->nodes[i]->type == NODE_TYPE_SUB || root->nodes[i]->type == NODE_TYPE_MUL || root->nodes[i]->type == NODE_TYPE_DIV) {
+                Node* node = (Node*)(root->nodes[i]->node);
+                if (node->name == aname) {
+                    node->output = number;
                 }
-                else if (node1->name == bname) {
+                else if (node->name == bname) {
                     if (bnumber <= 0) {
-                        node1->inputs[0] = number;
+                        node->inputs[0] = number;
                     }
                     else if (bnumber >= 1) {
-                        node1->inputs[1] = number;
+                        node->inputs[1] = number;
                     }
                 }
-                break;
-            case NODE_TYPE_ADD:
-                AddNode* node2 = (AddNode*)(root->nodes[i]->node);
-                if (node2->name == aname) {
-                    node2->output = number;
+            }
+            else if (root->nodes[i]->type == NODE_TYPE_ADD) {
+                AddNode* node = (AddNode*)(root->nodes[i]->node);
+                if (node->name == aname) {
+                    node->output = number;
                 }
-                else if (node2->name == bname) {
+                else if (node->name == bname) {
                     if (bnumber < 0) {
                         bnumber = 0;
                     }
-                    if (bnumber > node2->width) {
-                        bnumber = node2->width;
+                    if (bnumber > node->width) {
+                        bnumber = node->width;
                     }
-                    node2->inputs[bnumber] = number;
+                    node->inputs[bnumber] = number;
                 }
-                break;
-            case NODE_TYPE_OUTPUT:
-            case NODE_TYPE_PRINT:
+            }
+            else if (root->nodes[i]->type == NODE_TYPE_OUTPUT || root->nodes[i]->type == NODE_TYPE_PRINT) {
                 OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
                 if (node3->name == bname) {
                     node3->input = number;
                 }
-                break;
-            case NODE_TYPE_VAULE:
-                ValueNode* node4 = (ValueNode*)(root->nodes[i]->node);
-                if (node4->name == aname) {
-                    node4->output = number;
+            }
+            else if (root->nodes[i]->type == NODE_TYPE_VAULE) {
+                ValueNode* node = (ValueNode*)(root->nodes[i]->node);
+                if (node->name == aname) {
+                    node->output = number;
                 }
                 break;
-            default:
+            }
+            else {
                 std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
                 throw std::runtime_error("[ERROR] Wrong node type");
             }
@@ -148,24 +147,20 @@ namespace base_node {
     }
 
     void sort_node(Net* root) {
-        for (int i = 0; i < root->nodes.size(); i++) {
-            switch (root->nodes[i]->type) {
-            case NODE_TYPE_SUB:
-            case NODE_TYPE_MUL:
-            case NODE_TYPE_DIV:
-                Node* node1 = (Node*)(root->nodes[i]->node);
-                node1->is_sort = false;
-                break;
-            case NODE_TYPE_ADD:
-                AddNode* node2 = (AddNode*)(root->nodes[i]->node);
-                node2->is_sort = false;
-                break;
-            case NODE_TYPE_OUTPUT:
-            case NODE_TYPE_PRINT:
+        for (int i = 0; i < (int)(root->nodes.size()); i++) {
+            if (root->nodes[i]->type == NODE_TYPE_SUB || root->nodes[i]->type == NODE_TYPE_MUL || root->nodes[i]->type == NODE_TYPE_DIV) {
+                Node* node = (Node*)(root->nodes[i]->node);
+                node->is_sort = false;
+            }
+            else if (root->nodes[i]->type == NODE_TYPE_ADD) {
+                AddNode* node = (AddNode*)(root->nodes[i]->node);
+                node->is_sort = false;
+            }
+            else if (root->nodes[i]->type == NODE_TYPE_OUTPUT || root->nodes[i]->type == NODE_TYPE_PRINT) {
                 OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
                 node3->is_sort = false;
-                break;
-            default:
+            }
+            else {
                 std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
                 throw std::runtime_error("[ERROR] Wrong node type");
             }
@@ -173,7 +168,7 @@ namespace base_node {
 
         std::vector<int>* outputs = new std::vector<int>;
         (*outputs).reserve(root->nodes.size());
-        for (int i = 0; i < root->nodes.size(); i++) {
+        for (int i = 0; i < (int)(root->nodes.size()); i++) {
             if ((root->nodes[i]->type) == NODE_TYPE_VAULE) {
                 ValueNode* node = (ValueNode*)(root->nodes[i]->node);
                 (*outputs).push_back(node->output);
@@ -189,34 +184,30 @@ namespace base_node {
         int hight = 0;
         while (true) {
             hight++;
-            for (int i = 0; i < root->nodes.size(); i++) {
-                switch (root->nodes[i]->type) {
-                case NODE_TYPE_SUB:
-                case NODE_TYPE_MUL:
-                case NODE_TYPE_DIV:
-                    Node* node1 = (Node*)(root->nodes[i]->node);
-                    if (!(node1->is_sort)) {
-                        if (in(node1->inputs[0], (*outputs)) && in(node1->inputs[1], (*outputs))) {
-                            node1->hight = hight;
-                            node1->is_sort = true;
+            for (int i = 0; i < (int)(root->nodes.size()); i++) {
+                if (root->nodes[i]->type == NODE_TYPE_SUB || root->nodes[i]->type == NODE_TYPE_MUL || root->nodes[i]->type == NODE_TYPE_DIV) {
+                    Node* node = (Node*)(root->nodes[i]->node);
+                    if (!(node->is_sort)) {
+                        if (in(node->inputs[0], (*outputs)) && in(node->inputs[1], (*outputs))) {
+                            node->hight = hight;
+                            node->is_sort = true;
                         }
                     }
-                    break;
-                case NODE_TYPE_ADD:
-                    AddNode* node2 = (AddNode*)(root->nodes[i]->node);
-                    if (!(node2->is_sort)) {
+                }
+                else if (root->nodes[i]->type == NODE_TYPE_ADD) {
+                    AddNode* node = (AddNode*)(root->nodes[i]->node);
+                    if (!(node->is_sort)) {
                         bool in_it = true;
-                        for (int i = 0; i < node2->width; i++) {
-                            in_it = in_it && in(node2->inputs[i], (*outputs));
+                        for (int i = 0; i < node->width; i++) {
+                            in_it = in_it && in(node->inputs[i], (*outputs));
                         }
                         if (in_it) {
-                            node2->hight = hight;
-                            node2->is_sort = true;
+                            node->hight = hight;
+                            node->is_sort = true;
                         }
                     }
-                    break;
-                case NODE_TYPE_OUTPUT:
-                case NODE_TYPE_PRINT:
+                }
+                else if (root->nodes[i]->type == NODE_TYPE_OUTPUT || root->nodes[i]->type == NODE_TYPE_PRINT) {
                     OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
                     if (!(node3->is_sort)) {
                         if (in(node3->input, (*outputs))) {
@@ -224,8 +215,8 @@ namespace base_node {
                             node3->is_sort = true;
                         }
                     }
-                    break;
-                default:
+                }
+                else {
                     std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
                     throw std::runtime_error("[ERROR] Wrong node type");
                 }
@@ -235,7 +226,7 @@ namespace base_node {
     }
 
     bool in(int a, std::vector<int> b) {
-        for (int i = 0; i < b.size(); i++) {
+        for (int i = 0; i < (int)(b.size()); i++) {
             if (a == b[i]) {
                 return true;
             }
@@ -244,23 +235,19 @@ namespace base_node {
     }
 
     int get_node_hight(MNode* node) {
-        switch (node->type) {
-        case NODE_TYPE_SUB:
-        case NODE_TYPE_MUL:
-        case NODE_TYPE_DIV:
-            Node* node1 = (Node*)(node->type);
-            return node1->hight;
-            break;
-        case NODE_TYPE_ADD:
-            AddNode* node2 = (AddNode*)(node->type);
-            return node2->hight;
-            break;
-        case NODE_TYPE_OUTPUT:
-        case NODE_TYPE_PRINT:
-            OutputNode* node3 = (OutputNode*)(node->type);
-            return node3->hight;
-            break;
-        default:
+        if (node->type == NODE_TYPE_SUB || node->type == NODE_TYPE_MUL || node->type == NODE_TYPE_DIV) {
+            Node* n = (Node*)(node->type);
+            return n->hight;
+        }
+        else if (node->type == NODE_TYPE_ADD) {
+            AddNode* n = (AddNode*)(node->type);
+            return n->hight;
+        }
+        else if (node->type == NODE_TYPE_OUTPUT || node->type == NODE_TYPE_PRINT) {
+            OutputNode* n = (OutputNode*)(node->type);
+            return n->hight;
+        }
+        else {
             std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
             throw std::runtime_error("[ERROR] Wrong node type");
         }
@@ -279,70 +266,72 @@ namespace base_node {
     }
 
     double node_forward(double a, double b, MNode* node) {
-        Node* node1 = (Node*)(node->node);
-        node1->inputs[0] = a;
-        node1->inputs[1] = b;
-        switch (node->type) {
-        case NODE_TYPE_SUB:
+        Node* n = (Node*)(node->node);
+        n->value[0] = a;
+        n->value[1] = b;
+        if (node->type == NODE_TYPE_SUB) {
             return a - b;
-        case NODE_TYPE_MUL:
+        }
+        else if (node->type == NODE_TYPE_MUL) {
             return a * b;
-        case NODE_TYPE_DIV:
+        }
+        else if (node->type == NODE_TYPE_DIV) {
             return a / b;
         }
-
+        else {
+            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+            throw std::runtime_error("[ERROR] Wrong node type");
+        }
     }
 
     double node_forward(double* a, MNode* node) {
-        switch (node->type) {
-        case NODE_TYPE_ADD:
+        if (node->type == NODE_TYPE_ADD) {
             double value = 0.0;
-            AddNode* node2 = (AddNode*)(node->node);
-            for (int i = 0; i < node2->width; i++) {
+            AddNode* n = (AddNode*)(node->node);
+            for (int i = 0; i < n->width; i++) {
                 value += a[i];
             }
             return value;
         }
+        else {
+            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+            throw std::runtime_error("[ERROR] Wrong node type");
+            return 0.0;
+        }
     }
 
     void node_forward(double a, MNode* node, Net* root) {
-        switch (node->type) {
-        case NODE_TYPE_OUTPUT:
-        case NODE_TYPE_PRINT:
+        if (node->type == NODE_TYPE_OUTPUT || node->type == NODE_TYPE_PRINT) {
             OutputNode* node3 = (OutputNode*)(node->node);
             std::cout << a;
             Tuple* t = new Tuple;
             t->key = node3->name;
             t->value = a;
             root->outputs.push_back(t);
-            break;
-        default:
-            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
-            throw std::runtime_error("[ERROR] Wrong node type");
         }
     }
 
     double node_forward(MNode* node) {
-        switch (node->type) {
-        case NODE_TYPE_VAULE:
-            ValueNode* node4 = (ValueNode*)(node->type);
-            return node4->value;
-            break;
-        default:
+        if (node->type == NODE_TYPE_VAULE) {
+            ValueNode* n = (ValueNode*)(node->type);
+            return n->value;
+        }
+        else {
             std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
             throw std::runtime_error("[ERROR] Wrong node type");
+            return 0.0;
         }
     }
 
     void net_forward(Net* root) {
         int max_hight = 1;
-        for (int i = 0; i < root->nodes.size(); i++) {
+        for (int i = 0; i < (int)(root->nodes.size()); i++) {
             max_hight = max(max_hight, get_node_hight(root->nodes[i]));
         }
         std::vector<Tuple*>* values = new std::vector<Tuple*>;
         (*values).reserve(root->nodes.size());
         for (int h = 0; h <= max_hight; h++) {
-            for (int i = 0; i < root->nodes.size(); i++) {
+            for (int i = 0; i < (int)(root->nodes.size()); i++) {
                 if (get_node_hight(root->nodes[i]) == h) {
                     if (h == 0) {
                         ValueNode* node = (ValueNode*)(root->nodes[i]->node);
@@ -352,33 +341,31 @@ namespace base_node {
                         (*values).push_back(t);
                     }
                     else {
-                        switch (root->nodes[i]->type) {
-                        case NODE_TYPE_SUB:
-                        case NODE_TYPE_MUL:
-                        case NODE_TYPE_DIV:
-                            Node* node1 = (Node*)(root->nodes[i]->node);
+                        if (root->nodes[i]->type == NODE_TYPE_SUB || root->nodes[i]->type == NODE_TYPE_MUL || root->nodes[i]->type == NODE_TYPE_DIV) {
+                            Node* n = (Node*)(root->nodes[i]->node);
                             double a = 0.0;
                             double b = 0.0;
-                            for (int j = 0; j < (*values).size(); j++) {
-                                if ((*values)[j]->key == node1->inputs[0]) {
+                            for (int j = 0; j < (int)((*values).size()); j++) {
+                                if ((*values)[j]->key == n->inputs[0]) {
                                     a = (*values)[j]->value;
                                 }
-                                else if ((*values)[j]->key == node1->inputs[1]) {
+                                else if ((*values)[j]->key == n->inputs[1]) {
                                     b = (*values)[j]->value;
                                 }
                             }
                             double c = node_forward(a, b, root->nodes[i]);
                             Tuple* t = new Tuple;
-                            t->key = node1->output;
+                            t->key = n->output;
                             t->value = c;
                             (*values).push_back(t);
-                        case NODE_TYPE_ADD:
-                            AddNode* node2 = (AddNode*)(root->nodes[i]->node);
-                            int w = node2->width;
+                        }
+                        else if (root->nodes[i]->type == NODE_TYPE_ADD) {
+                            AddNode* n = (AddNode*)(root->nodes[i]->node);
+                            int w = n->width;
                             double* aa = new double[w];
-                            for (int j = 0; j < node2->width; j++) {
-                                for (int k = 0; k < (*values).size(); k++) {
-                                    if ((*values)[k]->key == node2->inputs[j]) {
+                            for (int j = 0; j < n->width; j++) {
+                                for (int k = 0; k < (int)((*values).size()); k++) {
+                                    if ((*values)[k]->key == n->inputs[j]) {
                                         aa[j] = (*values)[k]->value;
                                     }
                                 }
@@ -386,19 +373,23 @@ namespace base_node {
                             double c = node_forward(aa, root->nodes[i]);
                             delete aa;
                             Tuple* t = new Tuple;
-                            t->key = node2->output;
+                            t->key = n->output;
                             t->value = c;
                             (*values).push_back(t);
-                        case NODE_TYPE_OUTPUT:
-                        case NODE_TYPE_PRINT:
-                            OutputNode* node3 = (OutputNode*)(root->nodes[i]->node);
+                        }
+                        else if (root->nodes[i]->type == NODE_TYPE_OUTPUT || root->nodes[i]->type == NODE_TYPE_PRINT) {
+                            OutputNode* n = (OutputNode*)(root->nodes[i]->node);
                             double a = 0.0;
-                            for (int j = 0; j < (*values).size(); j++) {
-                                if ((*values)[j]->key == node3->input) {
+                            for (int j = 0; j < (int)((*values).size()); j++) {
+                                if ((*values)[j]->key == n->input) {
                                     a = (*values)[j]->value;
                                 }
                             }
                             node_forward(a, root->nodes[i], root);
+                        }
+                        else {
+                            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+                            throw std::runtime_error("[ERROR] Wrong node type");
                         }
                     }
                 }
@@ -407,99 +398,103 @@ namespace base_node {
     }
 
     void node_backward(double a, MNode* node, Net* root) {
-        switch (node->type) {
-        case NODE_TYPE_VAULE:
-            ValueNode* node4 = (ValueNode*)(node->node);
+        if (node->type == NODE_TYPE_VAULE) {
+            ValueNode* n = (ValueNode*)(node->node);
             Tuple* t = new Tuple;
-            t->key = node4->name;
+            t->key = n->name;
             t->value = a;
             root->outputs.push_back(t);
         }
     }
 
     void node_backward(double a, MNode* node, std::vector<Tuple*>* values) {
-        switch (node->type) {
-        case NODE_TYPE_ADD:
-            AddNode* node2 = (AddNode*)(node->node);
-            for (int i = 0; i < node2->width; i++) {
+        if (node->type == NODE_TYPE_ADD) {
+            AddNode* n = (AddNode*)(node->node);
+            for (int i = 0; i < n->width; i++) {
                 Tuple* t = new Tuple;
-                t->key = node2->inputs[i];
+                t->key = n->inputs[i];
                 t->value = a;
                 (*values).push_back(t);
             }
-        case NODE_TYPE_SUB:
-            Node* node1 = (Node*)(node->node);
+        }
+        else if (node->type == NODE_TYPE_SUB) {
+            Node* n = (Node*)(node->node);
             Tuple* t = new Tuple;
-            t->key = node1->inputs[0];
+            t->key = n->inputs[0];
             t->value = a;
             (*values).push_back(t);
             Tuple* t2 = new Tuple;
-            t2->key = node1->inputs[1];
+            t2->key = n->inputs[1];
             t2->value = a;
             (*values).push_back(t2);
-        case NODE_TYPE_MUL:
-            Node* node1 = (Node*)(node->node);
+        }
+        else if (node->type == NODE_TYPE_MUL) {
+            Node* n = (Node*)(node->node);
             Tuple* t = new Tuple;
-            t->key = node1->inputs[0];
-            t->value = a * node1->value[1];
+            t->key = n->inputs[0];
+            t->value = a * n->value[1];
             (*values).push_back(t);
             Tuple* t2 = new Tuple;
-            t2->key = node1->inputs[1];
-            t2->value = a * node1->value[0];
+            t2->key = n->inputs[1];
+            t2->value = a * n->value[0];
             (*values).push_back(t2);
-        case NODE_TYPE_DIV:
-            Node* node1 = (Node*)(node->node);
+        }
+        else if (node->type == NODE_TYPE_DIV) {
+            Node* n = (Node*)(node->node);
             Tuple* t = new Tuple;
-            t->key = node1->inputs[0];
-            t->value = a * (1 / node1->value[1]);
+            t->key = n->inputs[0];
+            t->value = a * (1 / n->value[1]);
             (*values).push_back(t);
             Tuple* t2 = new Tuple;
-            t2->key = node1->inputs[1];
-            t2->value = a * node1->value[0];
+            t2->key = n->inputs[1];
+            t2->value = a * n->value[0];
             (*values).push_back(t2);
         }
     }
 
-    double* net_backward(Net* root) {
+    void net_backward(Net* root) {
         int max_hight = 1;
-        for (int i = 0; i < root->nodes.size(); i++) {
+        for (int i = 0; i < (int)(root->nodes.size()); i++) {
             max_hight = max(max_hight, get_node_hight(root->nodes[i]));
         }
         std::vector<Tuple*>* values = new std::vector<Tuple*>;
         (*values).reserve(root->nodes.size());
         for (int h = max_hight; h >= 0; h--) {
-            for (int i = 0; i < root->nodes.size(); i++) {
+            for (int i = 0; i < (int)(root->nodes.size()); i++) {
                 if (get_node_hight(root->nodes[i]) == h) {
-                    switch (root->nodes[i]->type) {
-                    case NODE_TYPE_VAULE:
-                        ValueNode* node4 = (ValueNode*)(root->nodes[i]->node);
+                    if (root->nodes[i]->type == NODE_TYPE_SUB || root->nodes[i]->type == NODE_TYPE_MUL || root->nodes[i]->type == NODE_TYPE_DIV) {
+                        Node* node = (Node*)(root->nodes[i]->node);
                         double a = 0.0;
-                        for (int j = 0; j < (*values).size(); j++) {
-                            if ((*values)[j]->key == node4->output) {
+                        for (int j = 0; j < (int)((*values).size()); j++) {
+                            if ((*values)[j]->key == node->output) {
+                                a = (*values)[j]->value;
+                            }
+                        }
+                        node_backward(a, root->nodes[i], values);
+                    }
+                    else if (root->nodes[i]->type == NODE_TYPE_ADD) {
+                        AddNode* node = (AddNode*)(root->nodes[i]->node);
+                        double a = 0.0;
+                        for (int j = 0; j < (int)((*values).size()); j++) {
+                            if ((*values)[j]->key == node->output) {
+                                a = (*values)[j]->value;
+                            }
+                        }
+                        node_backward(a, root->nodes[i], values);
+                    }
+                    else if (root->nodes[i]->type == NODE_TYPE_VAULE) {
+                        ValueNode* node = (ValueNode*)(root->nodes[i]->node);
+                        double a = 0.0;
+                        for (int j = 0; j < (int)((*values).size()); j++) {
+                            if ((*values)[j]->key == node->output) {
                                 a = (*values)[j]->value;
                             }
                         }
                         node_backward(a, root->nodes[i], root);
-                    case NODE_TYPE_ADD:
-                        AddNode* node2 = (AddNode*)(root->nodes[i]->node);
-                        double a = 0.0;
-                        for (int j = 0; j < (*values).size(); j++) {
-                            if ((*values)[j]->key == node2->output) {
-                                a = (*values)[j]->value;
-                            }
-                        }
-                        node_backward(a, root->nodes[i], values);
-                    case NODE_TYPE_SUB:
-                    case NODE_TYPE_MUL:
-                    case NODE_TYPE_DIV:
-                        Node* node1 = (Node*)(root->nodes[i]->node);
-                        double a = 0.0;
-                        for (int j = 0; j < (*values).size(); j++) {
-                            if ((*values)[j]->key == node1->output) {
-                                a = (*values)[j]->value;
-                            }
-                        }
-                        node_backward(a, root->nodes[i], values);
+                    }
+                    else {
+                        std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+                        throw std::runtime_error("[ERROR] Wrong node type");
                     }
                 }
             }
