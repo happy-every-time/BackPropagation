@@ -243,4 +243,55 @@ namespace base_node {
         }
         return false;
     }
+
+    double node_forward(double a, double b, MNode* node) {
+        switch (node->type) {
+        case NODE_TYPE_SUB:
+        case NODE_TYPE_MUL:
+        case NODE_TYPE_DIV:
+            Node* node1 = (Node*)(node->node);
+            break;
+        case NODE_TYPE_ADD:
+            AddNode* node2 = (AddNode*)(node->type);
+            break;
+        case NODE_TYPE_OUTPUT:
+        case NODE_TYPE_PRINT:
+            OutputNode* node3 = (OutputNode*)(node->type);
+            break;
+        case NODE_TYPE_VAULE:
+            ValueNode* node4 = (ValueNode*)(node->type);
+            break;
+        default:
+            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+            throw std::runtime_error("[ERROR] Wrong node type");
+        }
+    }
+
+    void node_forward(double a, MNode* node) {
+        switch (node->type) {
+        case NODE_TYPE_OUTPUT:
+        case NODE_TYPE_PRINT:
+            OutputNode* node3 = (OutputNode*)(node->type);
+            break;
+        default:
+            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+            throw std::runtime_error("[ERROR] Wrong node type");
+        }
+    }
+
+    double node_forward(MNode* node) {
+        switch (node->type) {
+        case NODE_TYPE_VAULE:
+            ValueNode* node4 = (ValueNode*)(node->type);
+            return node4->value;
+            break;
+        default:
+            std::cerr << "[ERROR] " << "Wrong node type" << std::endl;
+            throw std::runtime_error("[ERROR] Wrong node type");
+        }
+    }
+
+    double* net_forward(Net* root) {
+
+    }
 };

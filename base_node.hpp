@@ -31,7 +31,7 @@ namespace base_node {
         int higth;
         int name;
         int inputs[2];
-        int value[2];
+        double value[2];
     };
 
     struct AddNode {
@@ -43,27 +43,27 @@ namespace base_node {
         int higth;
         int name;
         int* inputs;
-        int* value;
+        double* value;
     };
 
     struct OutputNode {
         short type = -1;
         bool is_sort;
-        Net* root;
         int higth;
+        Net* root;
         int name;
         int input;
-        int value;
+        double value;
     };
 
     struct ValueNode {
         const short type = NODE_TYPE_VAULE;
         bool is_sort;
-        Net* root;
         int higth = 0;
+        Net* root;
         int name;
         int output;
-        int value;
+        double value;
     };
 
     Net* create_net(bool create_out);
@@ -74,4 +74,8 @@ namespace base_node {
     void link_node(Net* root, int aname, int bname, int bnumber);
     void sort_node(Net* root);
     bool in(int a, std::vector<int> b);
+    double node_forward(double a, double b, MNode* node);
+    void node_forward(double a, MNode* node);
+    double node_forward(MNode* node);
+    double* net_forward(Net* root);
 };
