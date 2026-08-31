@@ -90,8 +90,8 @@ namespace base_node {
         }
     }
 
-    void add_node(Net* root, MNode* node) {
-        root->nodes.push_back(*node);
+    void add_node(Net* root, MNode node) {
+        root->nodes.push_back(node);
     }
 
     void link_node(Net* root, int aname, int bname, int bnumber) {
@@ -166,17 +166,17 @@ namespace base_node {
             }
         }
 
-        std::vector<int>* outputs = new std::vector<int>;
-        (*outputs).reserve(root->nodes.size());
+        std::vector<int> outputs = {};
+        outputs.reserve(root->nodes.size());
         for (int i = 0; i < (int)(root->nodes.size()); i++) {
             if ((root->nodes[i].type) == NODE_TYPE_VAULE) {
                 ValueNode* node = (ValueNode*)(root->nodes[i].node);
-                (*outputs).push_back(node->output);
+                outputs.push_back(node->output);
             }
         }
         #if DEBUG
         std::cout << "[DEBUG] ";
-        for (int i : (*outputs)) {
+        for (int i : outputs) {
             std::cout << i << ' ';
         }
         std::cout << std::endl;
@@ -188,7 +188,7 @@ namespace base_node {
                 if (root->nodes[i].type == NODE_TYPE_SUB || root->nodes[i].type == NODE_TYPE_MUL || root->nodes[i].type == NODE_TYPE_DIV) {
                     Node* node = (Node*)(root->nodes[i].node);
                     if (!(node->is_sort)) {
-                        if (in(node->inputs[0], (*outputs)) && in(node->inputs[1], (*outputs))) {
+                        if (in(node->inputs[0], outputs) && in(node->inputs[1], outputs)) {
                             node->hight = hight;
                             node->is_sort = true;
                         }
@@ -199,7 +199,7 @@ namespace base_node {
                     if (!(node->is_sort)) {
                         bool in_it = true;
                         for (int i = 0; i < node->width; i++) {
-                            in_it = in_it && in(node->inputs[i], (*outputs));
+                            in_it = in_it && in(node->inputs[i], outputs);
                         }
                         if (in_it) {
                             node->hight = hight;
@@ -210,7 +210,7 @@ namespace base_node {
                 else if (root->nodes[i].type == NODE_TYPE_OUTPUT || root->nodes[i].type == NODE_TYPE_PRINT) {
                     OutputNode* node = (OutputNode*)(root->nodes[i].node);
                     if (!(node->is_sort)) {
-                        if (in(node->input, (*outputs))) {
+                        if (in(node->input, outputs)) {
                             node->hight = hight;
                             node->is_sort = true;
                         }
@@ -222,7 +222,6 @@ namespace base_node {
                 }
             }
         };
-        delete outputs;
     }
 
     bool in(int a, std::vector<int> b) {

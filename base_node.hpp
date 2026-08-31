@@ -79,7 +79,7 @@ namespace base_node {
     int get_a_new_number(Net* root);
     void del_a_number(Net* root, int number);
     
-    void add_node(Net* root, MNode node);
+    void add_node(Net* root, MNode* node);
     void link_node(Net* root, int aname, int bname, int bnumber);
     void sort_node(Net* root);
 
