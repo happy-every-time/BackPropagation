@@ -14,9 +14,9 @@
 namespace base_node {
     struct Net {
         std::vector<int> old_number = {0};
-        std::vector<struct MNode*> nodes;
-        std::vector<struct Tuple*> outputs;
-        std::vector<struct Tuple*> back_outputs;
+        std::vector<struct MNode> nodes;
+        std::vector<struct Tuple> outputs;
+        std::vector<struct Tuple> back_outputs;
         int just_number = 0;
     };
 
@@ -74,17 +74,17 @@ namespace base_node {
     };
 
     Net* create_net(bool create_out);
-    void* create_node(short type, Net* root, int name);
+    MNode create_node(short type, Net* root, int name);
 
     int get_a_new_number(Net* root);
     void del_a_number(Net* root, int number);
     
-    void add_node(Net* root, MNode* node);
+    void add_node(Net* root, MNode node);
     void link_node(Net* root, int aname, int bname, int bnumber);
     void sort_node(Net* root);
 
     bool in(int a, std::vector<int> b);
-    int get_node_hight(MNode* node);
+    int get_node_hight(MNode node);
     double max(double a, double b);
 
     double node_forward(double a, double b, MNode* node); // Base node
