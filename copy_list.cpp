@@ -1,7 +1,6 @@
 #include "copy_list.hpp"
 
 using namespace std;
-
 namespace tools
 {
     void copy(double* a, double* b, long length)
