@@ -7,6 +7,8 @@ namespace base_node
     struct node
     {
         long long position;
+        long long inputs_length;
+        long long outputs_length;
         long long* inputs;
         long long* outputs;
         double* forward_inputs;
@@ -17,6 +19,8 @@ namespace base_node
     struct net
     {
         node* n;
+        long long inputs_length;
+        long long outputs_length;
         double* inputs;
         double* outputs;
         long long size;
