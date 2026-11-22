@@ -11,4 +11,12 @@ namespace tools
             a[i] = b[i];
         }
     }
+
+    void copy(long long* a, long long* b, long length)
+    {
+        for (long i = 0; i < length; i++)
+        {
+            a[i] = b[i];
+        }
+    }
 }
