@@ -8,11 +8,13 @@ namespace stack
     {
         long long* data;
         long long top;
+        void push(long long data);
     };
 
     struct list
     {
-        long long* data;
-        long long length;
+        double* data;
+        double length;
+        void add(double data);
     };
 }
