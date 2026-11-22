@@ -12,7 +12,7 @@ namespace base_node
         long long* inputs;
         long long* outputs;
         double* forward_inputs;
-        double* forward_outputs;
+        double forward_output;
         short type;
     };
 
