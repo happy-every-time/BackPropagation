@@ -17,7 +17,7 @@ namespace base_node
 
     struct net
     {
-        node** n;
+        node* n;
         double* inputs;
         double* outputs;
         long long size;
@@ -36,8 +36,8 @@ namespace base_node
     long long remove_node(string name); // Search node name firstly,then use the position to remove it
 
     // functions about net link node
-    
+    double* get_node_inputs(long long position); // Get node's input from other node in the net
 
     // functions about node
-    double node_forward(node* node, );
+    double node_forward(node* node);
 }
